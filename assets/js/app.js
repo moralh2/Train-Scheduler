@@ -41,6 +41,17 @@ $("#train-new-submit").on("click", function (event) {
 
 });
 
+function createRow(data) {
+    var dataRow = $("<tr>")
+    var nameData = $("<td>").text(data.name)
+    var destinationData = $("<td>").text(data.destination)
+    var frequency = $("<td>").text(data.frequency)
+    var nextTrain = $("<td>").text(data.next)
+    var minutesAway = $("<td>").text(data.minutes)
+    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway)
+    $('#table-body').append(dataRow)
+}
+
 // Firebase watcher + initial loader HINT: .on("value")
 // database.ref().on("value", function(snapshot) {
 
