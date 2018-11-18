@@ -1,8 +1,8 @@
 $(document).ready(function () {
     $('.timepicker').timepicker({ twelveHour: false })
     makeTable()
-    runTimer()
-    $('.modal').modal({onCloseEnd: printMe("22222")})
+    nextMinutesInSeconds = (moment().startOf('minute').add(1, 'minutes').diff(moment(), "seconds")) + 2
+    setTimeout(function(){ runTimer() }, nextMinutesInSeconds * 1000);
 })
 
 function printMe(stringMe) {
@@ -90,7 +90,7 @@ function makeTable() {
 }
 
 function remakeTable() {
-    $('#current-time').text(moment().format("MM/DD/YYYY h:mm:ss a"))
+    $('#current-time').text(moment().format("MM/DD/YYYY h:mm a"))
     allRows = $('#table-body').children('tr')
     console.log(allRows)
     for (i = 0; i < allRows.length; i++) {
@@ -117,6 +117,7 @@ function calculateNext(data) {
 }
 
 function runTimer() {
+    console.log("started real timer")
+    remakeTable()
     intervalId = setInterval(remakeTable, 60 * 1000);
 }
-
