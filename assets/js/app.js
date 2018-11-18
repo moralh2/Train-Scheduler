@@ -30,6 +30,8 @@ var database = firebase.database()
 $("#train-new-submit").on("click", function (event) {
     event.preventDefault()
 
+    currentKey = $('#form-header')[0].dataset.key
+    console.log(currentKey)
     trainName = $("#train_name").val().trim()
     trainDestination = $("#train_destination").val().trim()
     trainStart = $("#train_start").val().trim()
@@ -42,21 +44,27 @@ $("#train-new-submit").on("click", function (event) {
             start: trainStart,
             frequency: trainFrequency
         }
+
+        if (currentKey = 'new') 
+
         database.ref().push(dataPush)
-        $("#train_name").val('')
-        $("#train_destination").val('')
-        $("#train_start").val('')
-        $("#train_frequency").val('')
-        $("#errors").html('')
+        M.Modal.getInstance($('#form-new')).close()
     }
     else {
         str = '<div class="col s12"><p class="red-text"><em>Please fill out all of fields</em></p></div>'
         $("#errors").html(str)
-
     }
+
 });
 
-$("#open-new-modal").on("click", function (event) { $("#errors").html('') })
+$("#open-new-modal").on("click", function (event) { 
+    $("#train_name").val('')
+    $("#train_destination").val('')
+    $("#train_start").val('')
+    $("#train_frequency").val('')
+    $("#errors").html('')
+    $('#form-header')[0].dataset.key = 'new'
+})
 
 function createRow(data) {
     var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start).attr('data-frequency', data.frequency)
