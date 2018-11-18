@@ -57,7 +57,9 @@ function createRow(data) {
     [minutesAwayValue, nextTrainValue] = calculateNext(data)
     var nextTrain = $("<td>").text(nextTrainValue)
     var minutesAway = $("<td>").text(minutesAwayValue)
-    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway)
+    var startTime = $("<td>").text(data.start)
+
+    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway).append(startTime)
     $('#table-body').append(dataRow)
 }
 
@@ -79,11 +81,10 @@ database.ref().on("value", function(snapshot) {
 function calculateNext(data) {
     var freq = data.frequency
     var start = moment(data.start, 'HH:mm').subtract(1, "years")
-    var now = moment()
-    var delta = now.diff( moment(start), "minutes");
+    var delta = moment().diff( moment(start), "minutes");
     var remainder = delta % freq
     var minutesUntil = freq - remainder
-    var upcoming = now.add(minutesUntil, 'minutes').format('h:mm a')
+    var upcoming = moment().add(minutesUntil, 'minutes').format('h:mm a')
     console.log("upcoming minutes ::: " + minutesUntil)
     console.log("upcoming time ::: " + upcoming)
     result = [minutesUntil, upcoming]
