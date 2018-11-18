@@ -1,8 +1,13 @@
 $(document).ready(function () {
     $('.timepicker').timepicker({ twelveHour: false })
-    remakeTable()
+    makeTable()
     runTimer()
+    $('.modal').modal({onCloseEnd: printMe("22222")})
 })
+
+function printMe(stringMe) {
+    console.log(stringMe)
+}
 
 var intervalId;                                 // id for setInterval timer
 
@@ -48,29 +53,25 @@ $("#train-new-submit").on("click", function (event) {
         $("#errors").html(str)
 
     }
-
-    
-
 });
 
 function createRow(data) {
-    
-    var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start)
+    var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start).attr('data-frequency', data.frequency)
     var nameData = $("<td>").text(data.name)
     var destinationData = $("<td>").text(data.destination)
     var frequency = $("<td>").text(data.frequency + ' min')
     var minutesAwayValue
     var nextTrainValue
     [minutesAwayValue, nextTrainValue] = calculateNext(data)
-    var nextTrain = $("<td>").text(nextTrainValue)
-    var minutesAway = $("<td>").text(minutesAwayValue)
+    var nextTrain = $("<td>").addClass("next-train").text(nextTrainValue)
+    var minutesAway = $("<td>").addClass("min-away").text(minutesAwayValue)
     var startTime = $("<td>").text(data.start)
 
     dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway).append(startTime)
     $('#table-body').append(dataRow)
 }
 
-function remakeTable() {
+function makeTable() {
     $('#current-time').text(moment().format("MM/DD/YYYY h:mm a"))
     database.ref().on("value", function(snapshot) {
 
@@ -86,7 +87,20 @@ function remakeTable() {
     }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
     });
+}
 
+function remakeTable() {
+    $('#current-time').text(moment().format("MM/DD/YYYY h:mm:ss a"))
+    allRows = $('#table-body').children('tr')
+    console.log(allRows)
+    for (i = 0; i < allRows.length; i++) {
+       var row =  allRows.get(i)
+       var minutesAwayValue
+       var nextTrainValue 
+       [minutesAwayValue, nextTrainValue] = calculateNext({frequency: row.dataset.frequency, start: row.dataset.start})
+       $('#'+row.dataset.key+" td.next-train").text(nextTrainValue) 
+       $('#'+row.dataset.key+" td.min-away").text(minutesAwayValue) 
+    }
 }
 
 function calculateNext(data) {
@@ -103,5 +117,6 @@ function calculateNext(data) {
 }
 
 function runTimer() {
-    intervalId = setInterval(remakeTable, 60 * 10000);
+    intervalId = setInterval(remakeTable, 60 * 1000);
 }
+
