@@ -1,7 +1,11 @@
-// START CODING BELOW!!
 $(document).ready(function () {
     $('.timepicker').timepicker({ twelveHour: false })
+    remakeTable()
+    runTimer()
 })
+
+var intervalId;                                 // id for setInterval timer
+
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyA2iLO49qFM9eOFY47KJuuFaH-_Ajpd2b0",
@@ -16,11 +20,6 @@ firebase.initializeApp(config)
 
 // Create a variable to reference the database
 var database = firebase.database()
-
-var trainName = ""
-var trainDestination = ""
-var trainStart = ""
-var trainFrequency = ""
 
 $("#train-new-submit").on("click", function (event) {
     event.preventDefault()
@@ -48,7 +47,7 @@ $("#train-new-submit").on("click", function (event) {
 
 function createRow(data) {
     
-    var dataRow = $("<tr>").attr('id', data.key).attr('data-value', data.key)
+    var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start)
     var nameData = $("<td>").text(data.name)
     var destinationData = $("<td>").text(data.destination)
     var frequency = $("<td>").text(data.frequency + ' min')
@@ -63,20 +62,24 @@ function createRow(data) {
     $('#table-body').append(dataRow)
 }
 
-database.ref().on("value", function(snapshot) {
+function remakeTable() {
+    $('#current-time').text(moment().format("MM/DD/YYYY h:mm a"))
+    database.ref().on("value", function(snapshot) {
 
-  allTrains = snapshot.val()
-  $('#table-body').empty()
-  for (key in allTrains) {
-      data = allTrains[key]
-      data.key = key
-      createRow(data)
-  }
+        allTrains = snapshot.val()
+        $('#table-body').empty()
+        for (key in allTrains) {
+            data = allTrains[key]
+            data.key = key
+            createRow(data)
+        }
 
-  // Handle the errors
-}, function(errorObject) {
-  console.log("Errors handled: " + errorObject.code);
-});
+    // Handle the errors
+    }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+    });
+
+}
 
 function calculateNext(data) {
     var freq = data.frequency
@@ -91,3 +94,6 @@ function calculateNext(data) {
     return result
 }
 
+function runTimer() {
+    intervalId = setInterval(remakeTable, 60 * 1000);
+}
