@@ -66,7 +66,7 @@ function createRow(data) {
 
     // var minAwayShort = $('span').addClass('new badge red').attr('data-badge-caption', 'min').text(minutesAwayValue)
     // var intDiv = $('div').addClass("next-train").append(minAwayShort).text(nextTrainValue)
-    var rawHtml = '<span class="new badge indigo accent-2" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
+    var rawHtml = '<span class="new badge indigo accent-2 pulse" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
     // var nextTrain = $("<td>").html(rawHtml)
 
     var nextTrain = $("<td>").addClass("next-train").text(nextTrainValue)
@@ -95,6 +95,8 @@ function makeTable() {
 }
 
 function remakeTable() {
+    colorsForPulse = ['orange darken-3', 'deep-orange darken-2']
+    colorForPulse = colorsForPulse[ parseInt(moment().format('mm')) % 2 ]
     $('#current-time').text(moment().format("h:mm A"))
     allRows = $('#table-body').children('tr')
     console.log(allRows)
@@ -103,7 +105,7 @@ function remakeTable() {
        var minutesAwayValue
        var nextTrainValue 
        [minutesAwayValue, nextTrainValue] = calculateNext({frequency: row.dataset.frequency, start: row.dataset.start})
-       var rawHtml = '<span class="new badge green accent-3 pulse" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
+       var rawHtml = '<span class="new badge ' + colorForPulse + ' pulse" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
        $('#'+row.dataset.key+" td.next-train").text(nextTrainValue) 
        $('#'+row.dataset.key+" td.min-away").html(rawHtml)
     }
