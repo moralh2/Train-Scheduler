@@ -18,7 +18,7 @@
                 <div class="card indigo darken-1">
                     <div class="card-content white-text">
                         <span class="card-title center-align">
-                            <h4 >Train Scheduler (v3.2.0)</h4>
+                            <h4>Train Scheduler (v3.2.0)</h4>
                             <p id="current-time"></p>
                         </span>
                     </div>
@@ -52,51 +52,63 @@
     <div class="container">
 
         <div class="row">
-            <div class="col s12 m8 offset-m2">
+            <div class="col s12 m8 offset-m2 center-align">
 
-                <div class="card">
-                    <div class="card-content indigo accent-3 white-text">
-                        <span class="card-title center-align">
-                            <h5>Add New Train</h5>
-                        </span>
-                    </div>
 
-                    <div class="card-content">
-                        <form>
-                            <div id="errors" class="row">
-                                <!-- Errors from not submitting all fields -->
-                            </div>
+                <a id="open-new-modal" class="waves-effect waves-light indigo accent-3 btn modal-trigger" data-target="form-new">Add New Train</a>
 
-                            <div class="row">
-                                <div class="input-field col s6">
-                                    <input placeholder="Enter name" id="train_name" type="text" class="validate">
-                                    <label for="train_name">Name</label>
+                <!-- Modal Structure -->
+                <div id="form-new" class="modal bottom-sheet">
+                    <div class="modal-content">
+                            <div class="card">
+                                    <!-- <div class="card-content indigo accent-3 white-text">
+                                        <span class="card-title center-align">
+                                            <h5>Add New Train</h5>
+                                        </span>
+                                    </div> -->
+                
+                                    <div class="card-content">
+                                        <form>
+                                            <div id="errors" class="row">
+                                                <!-- Errors from not submitting all fields -->
+                                            </div>
+                
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input placeholder="Enter name" id="train_name" type="text" class="validate">
+                                                    <label for="train_name">Name</label>
+                                                </div>
+                
+                                                <div class="input-field col s6">
+                                                    <input placeholder="Enter City, State" id="train_destination" type="text" class="validate">
+                                                    <label for="train_destination">Destination</label>
+                                                </div>
+                
+                                                <div class="input-field col s6">
+                                                    <input id="train_start" type="text" class="timepicker">
+                                                    <label for="train_start">Start Time (Click to select)</label>
+                                                </div>
+                
+                                                <div class="input-field col s6">
+                                                    <!-- Using class validate here to use HTML5 form validation for number  -->
+                                                    <input id="train_frequency" type="number" class="validate">
+                                                    <label for="train_frequency">Frequency (Minutes)</label>
+                                                </div>
+                                                <div class="center-align">
+                                                    <a id="train-new-submit" class="waves-effect waves-light btn indigo accent-3">submit</a>
+                                                </div>
+                
+                                            </div>
+                
+                                        </form>
+                                    </div>
                                 </div>
-
-                                <div class="input-field col s6">
-                                    <input placeholder="Enter City, State" id="train_destination" type="text" class="validate">
-                                    <label for="train_destination">Destination</label>
-                                </div>
-
-                                <div class="input-field col s6">
-                                    <input placeholder="Click to select" id="train_start" type="text" class="timepicker">
-                                    <label for="train_start">Start Time</label>
-                                </div>
-
-                                <div class="input-field col s6">
-                                    <!-- Using class validate here to use HTML5 form validation for number  -->
-                                    <input placeholder="Enter number (minutes)" id="train_frequency" type="number" class="validate">
-                                    <label for="train_frequency">Frequency</label>
-                                </div>
-                                <div class="center-align">
-                                    <a id="train-new-submit" class="waves-effect waves-light btn indigo accent-3">submit</a>
-                                </div>
-
-                            </div>
-
-                        </form>
                     </div>
                 </div>
+
+
+            
+
             </div>
         </div>
 

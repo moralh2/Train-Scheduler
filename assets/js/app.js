@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $(document).ready(function(){ $('.modal').modal() })
     $('.timepicker').timepicker({ twelveHour: false })
     makeTable()
     nextMinutesInSeconds = (moment().startOf('minute').add(1, 'minutes').diff(moment(), "seconds")) + 2
@@ -49,11 +50,13 @@ $("#train-new-submit").on("click", function (event) {
         $("#errors").html('')
     }
     else {
-        str = '<div class="col s12"><p class="red-text">Please fill out all fields</p></div>'
+        str = '<div class="col s12"><p class="red-text"><em>Please fill out all of fields</em></p></div>'
         $("#errors").html(str)
 
     }
 });
+
+$("#open-new-modal").on("click", function (event) { $("#errors").html('') })
 
 function createRow(data) {
     var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start).attr('data-frequency', data.frequency)
