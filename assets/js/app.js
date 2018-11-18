@@ -30,14 +30,19 @@ $("#train-new-submit").on("click", function (event) {
     trainStart = $("#train_start").val().trim()
     trainFrequency = $("#train_frequency").val().trim()
 
-    var trainID = database.ref().push({
+    dataPush = {
         name: trainName,
         destination: trainDestination,
         start: trainStart,
         frequency: trainFrequency
-    }).getKey();
+    }
 
-    console.log(trainID)
+    database.ref().push(dataPush)
+
+    $("#train_name").val('')
+    $("#train_destination").val('')
+    $("#train_start").val('')
+    $("#train_frequency").val('')
 
 });
 
@@ -56,27 +61,28 @@ function createRow(data) {
 database.ref().on("value", function(snapshot) {
 
   allTrains = snapshot.val()
-
+  $('#table-body').empty()
   for (key in allTrains) {
       data = allTrains[key]
       data.key = key
       createRow(data)
   }
-//   console.log(snapshot.val().name);
-//   console.log(snapshot.val().email);
-//   console.log(snapshot.val().age);
-//   console.log(snapshot.val().comment);
-
-  // Change the HTML to reflect
-
-//   $("#name-display").text(snapshot.val().name);
-//   $("#email-display").text(snapshot.val().email);
-//   $("#age-display").text(snapshot.val().age);
-//   $("#comment-display").text(snapshot.val().comment);
 
   // Handle the errors
 }, function(errorObject) {
   console.log("Errors handled: " + errorObject.code);
 });
 
+function calculateNext(data) {
+    var freq = data.frequency
+
+    var start = moment(data.start, 'HH:mm').subtract(1, "years")
+    var now = moment()
+    var delta = now.diff( moment(start), "minutes");
+    var remainder = delta % freq
+    var delta2 = freq - remainder
+    var upcoming = now.add(delta2, 'minutes').format('h:mm a')
+    console.log("upcoming minutes ::: " + delta2)
+    console.log("upcoming time ::: " + upcoming)
+}
 
