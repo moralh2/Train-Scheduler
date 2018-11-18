@@ -63,16 +63,21 @@ function createRow(data) {
     var minutesAwayValue
     var nextTrainValue
     [minutesAwayValue, nextTrainValue] = calculateNext(data)
-    var nextTrain = $("<td>").addClass("next-train").text(nextTrainValue)
-    var minutesAway = $("<td>").addClass("min-away").text(minutesAwayValue)
-    var startTime = $("<td>").text(data.start)
 
-    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway).append(startTime)
+    // var minAwayShort = $('span').addClass('new badge red').attr('data-badge-caption', 'min').text(minutesAwayValue)
+    // var intDiv = $('div').addClass("next-train").append(minAwayShort).text(nextTrainValue)
+    var rawHtml = '<span class="new badge indigo accent-2" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
+    // var nextTrain = $("<td>").html(rawHtml)
+
+    var nextTrain = $("<td>").addClass("next-train").text(nextTrainValue)
+    var minutesAway = $("<td>").addClass("min-away").html(rawHtml)
+
+    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway)
     $('#table-body').append(dataRow)
 }
 
 function makeTable() {
-    $('#current-time').text(moment().format("MM/DD/YYYY h:mm a"))
+    $('#current-time').text(moment().format("h:mm A"))
     database.ref().on("value", function(snapshot) {
 
         allTrains = snapshot.val()
@@ -90,7 +95,7 @@ function makeTable() {
 }
 
 function remakeTable() {
-    $('#current-time').text(moment().format("MM/DD/YYYY h:mm a"))
+    $('#current-time').text(moment().format("h:mm A"))
     allRows = $('#table-body').children('tr')
     console.log(allRows)
     for (i = 0; i < allRows.length; i++) {
@@ -98,8 +103,9 @@ function remakeTable() {
        var minutesAwayValue
        var nextTrainValue 
        [minutesAwayValue, nextTrainValue] = calculateNext({frequency: row.dataset.frequency, start: row.dataset.start})
+       var rawHtml = '<span class="new badge green accent-3 pulse" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
        $('#'+row.dataset.key+" td.next-train").text(nextTrainValue) 
-       $('#'+row.dataset.key+" td.min-away").text(minutesAwayValue) 
+       $('#'+row.dataset.key+" td.min-away").html(rawHtml)
     }
 }
 
@@ -109,7 +115,7 @@ function calculateNext(data) {
     var delta = moment().diff( moment(start), "minutes");
     var remainder = delta % freq
     var minutesUntil = freq - remainder
-    var upcoming = moment().add(minutesUntil, 'minutes').format('h:mm a')
+    var upcoming = moment().add(minutesUntil, 'minutes').format('h:mm A')
     console.log("upcoming minutes ::: " + minutesUntil)
     console.log("upcoming time ::: " + upcoming)
     result = [minutesUntil, upcoming]

@@ -18,15 +18,9 @@
                 <div class="card indigo darken-1">
                     <div class="card-content white-text">
                         <span class="card-title center-align">
-                            <h4 >Train Scheduler</h4>
-                            <h5 id="current-time"></h5>
+                            <h4 >Train Scheduler (v3.2.0)</h4>
+                            <p id="current-time"></p>
                         </span>
-                        <!-- 3.0.123 -->
-                        <p>Welcome, Schedule Admin. Below are the schedules for the upcoming trains.</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">Enter new train</a>
-                        <a href="#">Edit train</a>
                     </div>
                 </div>
             </div>
@@ -35,18 +29,15 @@
 
     <div class="container">
         <div class="row">
-            <div class="col s12 m8 offset-m2">
-
-                <table>
+            <div class="col s12 l8 offset-l2">
+                <table class="responsive-table">
                     <thead>
                         <tr>
-                            <th>Train Name</th>
+                            <th>Train</th>
                             <th>Destination</th>
                             <th>Frequency</th>
                             <th>Next Train</th>
-                            <th>Minutes Away</th>
-                            <th>START TIME</th>
-
+                            <th>Arriving</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -78,41 +69,28 @@
 
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <input placeholder="Enter name of train" id="train_name" type="text" class="validate">
-                                    <label for="train_name">Train Name</label>
+                                    <input placeholder="Enter name" id="train_name" type="text" class="validate">
+                                    <label for="train_name">Name</label>
                                 </div>
 
                                 <div class="input-field col s6">
-                                    <input placeholder="City, State" id="train_destination" type="text" class="validate">
-                                    <label for="train_destination">Train Destination</label>
+                                    <input placeholder="Enter City, State" id="train_destination" type="text" class="validate">
+                                    <label for="train_destination">Destination</label>
                                 </div>
 
                                 <div class="input-field col s6">
-                                    <input id="train_start" type="text" class="timepicker">
-                                    <label for="train_start">Train Start [HH:MM]</label>
+                                    <input placeholder="Click to select" id="train_start" type="text" class="timepicker">
+                                    <label for="train_start">Start Time</label>
                                 </div>
 
                                 <div class="input-field col s6">
                                     <!-- Using class validate here to use HTML5 form validation for number  -->
-                                    <input id="train_frequency" type="number" class="validate">
-                                    <label for="train_frequency">Train Frequency [min]</label>
+                                    <input placeholder="Enter number (minutes)" id="train_frequency" type="number" class="validate">
+                                    <label for="train_frequency">Frequency</label>
                                 </div>
                                 <div class="center-align">
                                     <a id="train-new-submit" class="waves-effect waves-light btn indigo accent-3">submit</a>
                                 </div>
-
-                                <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
-
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
 
                             </div>
 
