@@ -29,19 +29,27 @@ $("#train-new-submit").on("click", function (event) {
     trainStart = $("#train_start").val().trim()
     trainFrequency = $("#train_frequency").val().trim()
 
-    dataPush = {
-        name: trainName,
-        destination: trainDestination,
-        start: trainStart,
-        frequency: trainFrequency
+    if (trainName && trainDestination && trainStart && trainFrequency) {
+        dataPush = {
+            name: trainName,
+            destination: trainDestination,
+            start: trainStart,
+            frequency: trainFrequency
+        }
+        database.ref().push(dataPush)
+        $("#train_name").val('')
+        $("#train_destination").val('')
+        $("#train_start").val('')
+        $("#train_frequency").val('')
+        $("#errors").html('')
+    }
+    else {
+        str = '<div class="col s12"><p class="red-text">Please fill out all fields</p></div>'
+        $("#errors").html(str)
+
     }
 
-    database.ref().push(dataPush)
-
-    $("#train_name").val('')
-    $("#train_destination").val('')
-    $("#train_start").val('')
-    $("#train_frequency").val('')
+    
 
 });
 
@@ -95,5 +103,5 @@ function calculateNext(data) {
 }
 
 function runTimer() {
-    intervalId = setInterval(remakeTable, 60 * 1000);
+    intervalId = setInterval(remakeTable, 60 * 10000);
 }

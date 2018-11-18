@@ -72,6 +72,9 @@
 
                     <div class="card-content">
                         <form>
+                            <div id="errors" class="row">
+                                <!-- Errors from not submitting all fields -->
+                            </div>
 
                             <div class="row">
                                 <div class="input-field col s6">
@@ -94,8 +97,10 @@
                                     <input id="train_frequency" type="number" class="validate">
                                     <label for="train_frequency">Train Frequency [min]</label>
                                 </div>
+                                <div class="center-align">
+                                    <a id="train-new-submit" class="waves-effect waves-light btn indigo accent-3">submit</a>
+                                </div>
 
-                                <a id="train-new-submit" class="waves-effect waves-light btn indigo accent-3 right">submit</a>
                             </div>
 
                         </form>
