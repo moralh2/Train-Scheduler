@@ -13,3 +13,4 @@ In addition, there is a button to add a new train, which triggers the same modal
 ## Tackled Extra Challenges: 
 (1) The page will update the arrival times at the top of every minute: a timeout calculates when the next minute will happen, upon which it triggers a timer that calls a function every 60 seconds to update the arrival times.
 (2) User can edit and delete trains: the edit button loads the form with the current DB values, and makes a push when the form submits. The delete button triggers the record to be removed. In order to do these two tasks, the important thing was having access to the unique key (ID) used in the DB for each record.
+(3) Not-required: Used Materialize CSS for the front-end in order become familiar with this library ahead of Project 1, where it will also be used.
