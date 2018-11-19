@@ -66,7 +66,7 @@ $("#open-new-modal").on("click", function (event) {
 // Train data obj is passed to this function, which creates all of the row elements for the table
 function createRow(data) {
     var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start).attr('data-frequency', data.frequency)
-    var nameData = $("<td>").addClass('train-name indigo accent-1').text(data.name)
+    var nameData = $("<td>").addClass('train-name indigo accent-1 z-depth-3').text(data.name)
     var destinationData = $("<td>").addClass('train-destination').text(data.destination)
     var frequency = $("<td>").addClass('train-frequency').text(data.frequency + ' min')
     var minutesAwayValue
