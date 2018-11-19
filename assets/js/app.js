@@ -84,6 +84,8 @@ function createRow(data) {
 
     var btns = $("<td>")
     var editBtn = $('<a>').addClass("btn-floating btn-small waves-effect waves-light indigo edit-train").html('<i class="material-icons">edit</i>')
+    var removeBtn = $('<a>').addClass("btn-floating btn-small waves-effect waves-light red remove-train").html('<i class="material-icons">delete</i>')
+
 
     editBtn.on("click", function (event) {
         var trainKey = $(this).parent().parent()[0].id
@@ -105,7 +107,13 @@ function createRow(data) {
         M.Modal.getInstance($('#form-new')).open()
         M.updateTextFields() // Without this, the labels were not updated to active, so the placeholders and the data meshed
     })
-    btns.append(editBtn)
+
+    removeBtn.on("click", function (event) {
+        var trainKey = $(this).parent().parent()[0].id
+        database.ref(trainKey).remove()
+    })
+
+    btns.append(editBtn).append(removeBtn)
     dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway).append(btns)
     $('#table-body').append(dataRow)
 }
