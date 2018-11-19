@@ -1,3 +1,4 @@
+// Initializing the modal, the timepicker, creating the first instance of the makeTable, and calculating the timeout before the minute changes -- at which time, a timer reloads the time calculations every 60 seconds
 $(document).ready(function () {
     $(document).ready(function(){ $('.modal').modal() })
     $('.timepicker').timepicker({ twelveHour: false })
@@ -5,12 +6,6 @@ $(document).ready(function () {
     var nextMinutesInSeconds = (moment().startOf('minute').add(1, 'minutes').diff(moment(), "seconds")) + 2
     setTimeout(function(){ runTimer() }, nextMinutesInSeconds * 1000);
 })
-
-function printMe(stringMe) {
-    console.log(stringMe)
-}
-
-var intervalId;                                 // id for setInterval timer
 
 // Initialize Firebase
 var config = {
@@ -21,17 +16,13 @@ var config = {
     storageBucket: "",
     messagingSenderId: "536473866489"
   };
-
 firebase.initializeApp(config)
-
-// Create a variable to reference the database
 var database = firebase.database()
 
+// When the submit button is clicked, the code looks at the key to determine if it's an update (there is a key) or a push (the key says 'new')
 $("#train-new-submit").on("click", function (event) {
     event.preventDefault()
-
     currentKey = $('#form-header')[0].dataset.key
-    console.log(currentKey)
     trainName = $("#train_name").val().trim()
     trainDestination = $("#train_destination").val().trim()
     trainStart = $("#train_start").val().trim()
@@ -53,6 +44,7 @@ $("#train-new-submit").on("click", function (event) {
             M.Modal.getInstance($('#form-new')).close()
         }
     }
+    //  Prevent blank submissions, display error
     else {
         str = '<div class="col s12"><p class="red-text"><em>Please fill out all of fields</em></p></div>'
         $("#errors").html(str)
@@ -60,6 +52,7 @@ $("#train-new-submit").on("click", function (event) {
 
 });
 
+// When modal is triggered from new-button, clear fields, load appropriate header
 $("#open-new-modal").on("click", function (event) {
     $('#form-header').html('<p>ADD NEW TRAIN</p>') 
     $("#train_name").val('')
@@ -70,9 +63,10 @@ $("#open-new-modal").on("click", function (event) {
     $('#form-header')[0].dataset.key = 'new'
 })
 
+// Train data obj is passed to this function, which creates all of the row elements for the table
 function createRow(data) {
     var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start).attr('data-frequency', data.frequency)
-    var nameData = $("<td>").addClass('train-name').text(data.name)
+    var nameData = $("<td>").addClass('train-name indigo accent-1').text(data.name)
     var destinationData = $("<td>").addClass('train-destination').text(data.destination)
     var frequency = $("<td>").addClass('train-frequency').text(data.frequency + ' min')
     var minutesAwayValue
@@ -86,7 +80,7 @@ function createRow(data) {
     var editBtn = $('<a>').addClass("btn-floating btn-small waves-effect waves-light indigo edit-train").html('<i class="material-icons">edit</i>')
     var removeBtn = $('<a>').addClass("btn-floating btn-small waves-effect waves-light red remove-train").html('<i class="material-icons">delete</i>')
 
-
+    // edit btn event: calls DB, gets current values, loads them on the form, and triggers the modal to open
     editBtn.on("click", function (event) {
         var trainKey = $(this).parent().parent()[0].id
         var train
@@ -108,6 +102,7 @@ function createRow(data) {
         M.updateTextFields() // Without this, the labels were not updated to active, so the placeholders and the data meshed
     })
 
+    // remove btn triggers for the record to be deleted in firebase using the key
     removeBtn.on("click", function (event) {
         var trainKey = $(this).parent().parent()[0].id
         database.ref(trainKey).remove()
@@ -118,6 +113,7 @@ function createRow(data) {
     $('#table-body').append(dataRow)
 }
 
+// This method is called to create the entire table from the entire dataset
 function makeTable() {
     $('#current-time').text(moment().format("h:mm A"))
     database.ref().on("value", function(snapshot) {
@@ -134,7 +130,8 @@ function makeTable() {
     });
 }
 
-function remakeTable() {
+// This method is triggered at 60-second intervals to re-load the next train and minutes 'til
+function getNewTimes() {
     colorsForPulse = ['orange darken-3', 'deep-orange darken-2']
     colorForPulse = colorsForPulse[ parseInt(moment().format('mm')) % 2 ]
     $('#current-time').text(moment().format("h:mm A"))
@@ -151,6 +148,7 @@ function remakeTable() {
     }
 }
 
+// This method calculates the next train and the minutes away based on given start time and frequency
 function calculateNext(data) {
     var freq = data.frequency
     var start = moment(data.start, 'HH:mm').subtract(1, "years")
@@ -164,8 +162,9 @@ function calculateNext(data) {
     return result
 }
 
+// This is triggered at the top of the next minute (after page loads), which calls the method to re-calculate times every minute
 function runTimer() {
     console.log("started real timer")
-    remakeTable()
-    intervalId = setInterval(remakeTable, 60 * 1000);
+    getNewTimes()
+    var intervalId = setInterval(getNewTimes, 60 * 1000);
 }

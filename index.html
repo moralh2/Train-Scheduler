@@ -19,7 +19,9 @@
                     <div class="card-content white-text">
                         <span class="card-title center-align">
                             <h4>Train Scheduler (v3.2.0)</h4>
-                            <p id="current-time"></p>
+                            <p id="current-time">
+                                <!-- Will display time when updated on the minute -->
+                            </p>
                         </span>
                     </div>
                 </div>
@@ -30,7 +32,7 @@
     <div class="container">
         <div class="row">
             <div class="col s12 m8 offset-m2">
-                <table class="responsive-table">
+                <table class="responsive-table centered">
                     <thead>
                         <tr>
                             <th>Train</th>
@@ -38,7 +40,7 @@
                             <th>Frequency</th>
                             <th>Next Train</th>
                             <th>Arriving</th>
-                            <th></th>
+                            <th>Edit/Delete</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -51,12 +53,11 @@
     </div>
 
     <div class="container">
-
         <div class="row">
             <div class="col s12 m8 offset-m2 center-align">
-                <a id="open-new-modal" class="waves-effect waves-light indigo accent-3 btn modal-trigger" data-target="form-new">Add
-                    New Train</a>
-                <!-- Modal Structure -->
+                 <!-- Button triggers modal to open, and form to be reset for new -->
+                <a id="open-new-modal" class="waves-effect waves-light indigo accent-3 btn modal-trigger" data-target="form-new">Add New Train</a>
+                <!-- Modal and form -->
                 <div id="form-new" class="modal bottom-sheet">
                     <div class="modal-content">
                         <div class="card">
@@ -69,65 +70,49 @@
                                     <div id="errors" class="row">
                                         <!-- Errors from not submitting all fields -->
                                     </div>
-
                                     <div class="row">
                                         <div class="input-field col s6">
                                             <input placeholder="Enter name" id="train_name" type="text" class="validate">
                                             <label for="train_name">Name</label>
                                         </div>
-
                                         <div class="input-field col s6">
                                             <input placeholder="Enter City, State" id="train_destination" type="text"
                                                 class="validate">
                                             <label for="train_destination">Destination</label>
                                         </div>
-
                                         <div class="input-field col s6">
-                                            <input id="train_start" type="text" class="timepicker">
-                                            <label for="train_start">Start Time (Click to select)</label>
+                                            <input placeholder="Click to select" id="train_start" type="text" class="timepicker">
+                                            <label for="train_start">Start Time (Click)</label>
                                         </div>
-
                                         <div class="input-field col s6">
                                             <!-- Using class validate here to use HTML5 form validation for number  -->
-                                            <input id="train_frequency" type="number" class="validate">
+                                            <input placeholder="Enter number" id="train_frequency" type="number" class="validate">
                                             <label for="train_frequency">Frequency (Minutes)</label>
                                         </div>
                                         <div class="center-align">
                                             <a id="train-new-submit" class="waves-effect waves-light btn indigo accent-3">submit</a>
                                         </div>
-
                                     </div>
-
                                 </form>
                             </div>
+
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-
     </div>
-
-
     <!--JQuery-->
     <script src="https://code.jquery.com/jquery.js"></script>
-
     <!-- Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
-
     <!-- Firebase Reference -->
     <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-database.js"></script>
-    <!-- App JS -->
-    <script src="assets/js/app.js"></script>
-
     <!-- Moment.js Reference -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-
-
-
-
+    <!-- App JS -->
+    <script src="assets/js/app.js"></script>
 </body>
-
 </html>
