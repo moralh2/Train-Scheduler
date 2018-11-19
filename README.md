@@ -1,6 +1,6 @@
 # Train Scheduler v3.2.0
 
-HW 7 - Train-Scheduler
+## HW 7 - Train-Scheduler:
 
 The main focus area for this assigment was the use of Firebase in order to load content unto the page from a remote database. In addition, Moment.js was used to make time calculations.
 
@@ -10,6 +10,6 @@ At the end of each row, there is an edit button and a delete button for every tr
 
 In addition, there is a button to add a new train, which triggers the same modal to open, but with none of the fields populated; and submission of the form (with all fields entered) will trigger a push to the Firebase DB, which then triggers for all of the trains schedules to be updated on the table.
 
-Tackled Extra Challenges: 
+## Tackled Extra Challenges: 
 (1) The page will update the arrival times at the top of every minute: a timeout calculates when the next minute will happen, upon which it triggers a timer that calls a function every 60 seconds to update the arrival times.
 (2) User can edit and delete trains: the edit button loads the form with the current DB values, and makes a push when the form submits. The delete button triggers the record to be removed. In order to do these two tasks, the important thing was having access to the unique key (ID) used in the DB for each record.
