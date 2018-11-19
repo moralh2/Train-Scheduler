@@ -2,7 +2,7 @@ $(document).ready(function () {
     $(document).ready(function(){ $('.modal').modal() })
     $('.timepicker').timepicker({ twelveHour: false })
     makeTable()
-    nextMinutesInSeconds = (moment().startOf('minute').add(1, 'minutes').diff(moment(), "seconds")) + 2
+    var nextMinutesInSeconds = (moment().startOf('minute').add(1, 'minutes').diff(moment(), "seconds")) + 2
     setTimeout(function(){ runTimer() }, nextMinutesInSeconds * 1000);
 })
 
@@ -44,11 +44,14 @@ $("#train-new-submit").on("click", function (event) {
             start: trainStart,
             frequency: trainFrequency
         }
-
-        if (currentKey = 'new') 
-
-        database.ref().push(dataPush)
-        M.Modal.getInstance($('#form-new')).close()
+        if (currentKey == "new") {
+            database.ref().push(dataPush)
+            M.Modal.getInstance($('#form-new')).close()
+        }
+        else if (currentKey[0] == "-") {
+            database.ref(currentKey).update(dataPush)
+            M.Modal.getInstance($('#form-new')).close()
+        }
     }
     else {
         str = '<div class="col s12"><p class="red-text"><em>Please fill out all of fields</em></p></div>'
@@ -57,7 +60,8 @@ $("#train-new-submit").on("click", function (event) {
 
 });
 
-$("#open-new-modal").on("click", function (event) { 
+$("#open-new-modal").on("click", function (event) {
+    $('#form-header').html('<p>ADD NEW TRAIN</p>') 
     $("#train_name").val('')
     $("#train_destination").val('')
     $("#train_start").val('')
@@ -68,29 +72,47 @@ $("#open-new-modal").on("click", function (event) {
 
 function createRow(data) {
     var dataRow = $("<tr>").attr('id', data.key).attr('data-key', data.key).attr('data-start', data.start).attr('data-frequency', data.frequency)
-    var nameData = $("<td>").text(data.name)
-    var destinationData = $("<td>").text(data.destination)
-    var frequency = $("<td>").text(data.frequency + ' min')
+    var nameData = $("<td>").addClass('train-name').text(data.name)
+    var destinationData = $("<td>").addClass('train-destination').text(data.destination)
+    var frequency = $("<td>").addClass('train-frequency').text(data.frequency + ' min')
     var minutesAwayValue
     var nextTrainValue
     [minutesAwayValue, nextTrainValue] = calculateNext(data)
-
-    // var minAwayShort = $('span').addClass('new badge red').attr('data-badge-caption', 'min').text(minutesAwayValue)
-    // var intDiv = $('div').addClass("next-train").append(minAwayShort).text(nextTrainValue)
     var rawHtml = '<span class="new badge indigo accent-2 pulse" data-badge-caption="min">in ' + minutesAwayValue + '</span>'
-    // var nextTrain = $("<td>").html(rawHtml)
-
     var nextTrain = $("<td>").addClass("next-train").text(nextTrainValue)
     var minutesAway = $("<td>").addClass("min-away").html(rawHtml)
 
-    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway)
+    var btns = $("<td>")
+    var editBtn = $('<a>').addClass("btn-floating btn-small waves-effect waves-light indigo edit-train").html('<i class="material-icons">edit</i>')
+
+    editBtn.on("click", function (event) {
+        var trainKey = $(this).parent().parent()[0].id
+        var train
+
+        database.ref(trainKey).on("value", function(snapshot) {
+            train = snapshot.val()
+        }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+        });
+
+        $('#form-header').html('<p>EDIT TRAIN</p>') 
+        $('#form-header')[0].dataset.key = trainKey
+        $("#train_name").val(train.name)
+        $("#train_destination").val(train.destination)
+        $("#train_start").val(train.start)
+        $("#train_frequency").val(train.frequency)
+        $("#errors").html('')
+        M.Modal.getInstance($('#form-new')).open()
+        M.updateTextFields() // Without this, the labels were not updated to active, so the placeholders and the data meshed
+    })
+    btns.append(editBtn)
+    dataRow.append(nameData).append(destinationData).append(frequency).append(nextTrain).append(minutesAway).append(btns)
     $('#table-body').append(dataRow)
 }
 
 function makeTable() {
     $('#current-time').text(moment().format("h:mm A"))
     database.ref().on("value", function(snapshot) {
-
         allTrains = snapshot.val()
         $('#table-body').empty()
         for (key in allTrains) {
@@ -98,7 +120,6 @@ function makeTable() {
             data.key = key
             createRow(data)
         }
-
     // Handle the errors
     }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
